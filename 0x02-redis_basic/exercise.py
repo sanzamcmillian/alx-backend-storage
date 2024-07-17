@@ -17,12 +17,29 @@ def count_calls(method: Callable) -> Callable:
     return check
 
 
+def call_history(method: Callable) -> Callable:
+    """tracks the call details of a method in the class"""
+    @wraps(method)
+    def check(self, *args, **kwargs) -> Any:
+        """returns the method's output"""
+        in_key = "{}:inputs".format(method.__qualname__)
+        out_key = "{}:outputs".format(method.__qualname__)
+        if isinstance(self._redis, redis.Redis):
+            self._redis.rpush(in_key, str(args))
+        output = method(self, *args, **kwargs)
+        if isinstance(self._redis, redis.Redis):
+            self._redis.rpush(out_key, output)
+        return output
+    return check
+
+
 class Cache:
     def __init__(self) -> None:
         self._redis = redis.Redis()
         self._redis.flushdb(True)
 
     @count_calls
+    @call_history
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """ a method to generate a random key"""
         key_generate = str(uuid.uuid4())
