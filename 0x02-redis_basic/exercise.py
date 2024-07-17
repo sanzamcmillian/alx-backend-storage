@@ -16,7 +16,7 @@ class Cache:
         self._redis.set(key_generate, data)
         return key_generate
 
-    def get(self, key: str, fn: Callable = None) -> Union[str, int, float, bytes]:
+    def get(self, key: str, fn: Callable = None) -> Union[str, bytes]:
         """ a method to convert the data back to the desired redis format """
         catched = self._redis.get(key)
         return fn(catched) if fn is not None else catched
