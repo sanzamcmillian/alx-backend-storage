@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""_summary_"""
+"""redis for python"""
 from typing import Union, Callable, Any
 import uuid
 import redis
