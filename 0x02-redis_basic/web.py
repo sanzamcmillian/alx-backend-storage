@@ -7,6 +7,7 @@ from typing import Callable
 
 
 redis_store = redis.Redis()
+"""redis instance"""
 
 
 def cacher(method: Callable) -> Callable:
