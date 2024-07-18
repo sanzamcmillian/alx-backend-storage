@@ -16,10 +16,10 @@ def cacher(method: Callable) -> Callable:
         """wrapper method"""
         redis_store.incr(f"count:{url}")
         result = redis_store.get(f"html:{url}")
-        if result:
+        if result is not None:
             return result.decode("utf-8")
         result = method(url)
-        redis_store.setex(f"result:{url}", 10, result)
+        redis_store.setex(f"html:{url}", 10, result)
         return result
     return wrapper
 
