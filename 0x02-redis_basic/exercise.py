@@ -58,6 +58,7 @@ def replay(fn: Callable) -> None:
 
 
 class Cache:
+    """Object to store redis data"""
     def __init__(self) -> None:
         self._redis = redis.Redis()
         self._redis.flushdb(True)
