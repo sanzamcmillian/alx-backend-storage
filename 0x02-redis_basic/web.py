@@ -15,12 +15,12 @@ def cacher(method: Callable) -> Callable:
     def wrapper(url: str) -> str:
         """wrapper method"""
         redis_store.incr(f"count:{url}")
-        result = redis_store.get(f"html:{url}")
-        if result is not None:
-            return result.decode("utf-8")
-        result = method(url)
+        html_content = redis_store.get(f"html:{url}")
+        if html_content is not None:
+            return html_content.decode("utf-8")
+        html_content = method(url)
         redis_store.setex(f"html:{url}", 10, result)
-        return result
+        return html_content
     return wrapper
 
 
